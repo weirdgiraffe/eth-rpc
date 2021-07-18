@@ -2,7 +2,6 @@ package ethrpc
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -135,17 +134,12 @@ func (h Hash) String() string {
 	return "0x" + hex.EncodeToString([]byte(h))
 }
 
-func (h Hash) MarshalJSON() ([]byte, error) {
-	return json.Marshal(h.String())
+func (h Hash) MarshalText() ([]byte, error) {
+	return []byte(h.String()), nil
 }
 
-func (h *Hash) UnmarshalJSON(b []byte) error {
-	var s string
-	err := json.Unmarshal(b, &s)
-	if err != nil {
-		return err
-	}
-	*h, err = HashFromString(s)
+func (h *Hash) UnmarshalText(b []byte) (err error) {
+	*h, err = HashFromString(string(b))
 	return err
 }
 
