@@ -186,6 +186,9 @@ func DataFromString(s string) ([]byte, error) {
 	if s == "" {
 		return nil, nil
 	}
+	if len(s)%2 != 0 {
+		s = "0" + s
+	}
 	return hex.DecodeString(s)
 }
 
