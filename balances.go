@@ -11,15 +11,15 @@ import (
 )
 
 type Balance struct {
-	Address          Address    `json:"address"`
-	BlockHash        Hash       `json:"blockHash"`
-	BlockNumber      Number     `json:"blockNumber"`
-	Data             Data       `json:"data"`
-	LogIndex         Number     `json:"logIndex"`
-	Removed          bool       `json:"removed"`
-	Topics           []LogTopic `json:"topics"`
-	TransactionHash  Hash       `json:"transactionHash"`
-	TransactionIndex Number     `json:"transactionIndex"`
+	Address          Address `json:"address"`
+	BlockHash        Hash    `json:"blockHash"`
+	BlockNumber      Number  `json:"blockNumber"`
+	Data             Data    `json:"data"`
+	LogIndex         Number  `json:"logIndex"`
+	Removed          bool    `json:"removed"`
+	Topics           []Hash  `json:"topics"`
+	TransactionHash  Hash    `json:"transactionHash"`
+	TransactionIndex Number  `json:"transactionIndex"`
 }
 
 type BalancesClient struct {
@@ -61,7 +61,7 @@ func (c *BalancesClient) GetBalanceERC20(ctx context.Context, req GetBalanceRequ
 	if err != nil {
 		return decimal.Zero, errors.Wrap(err, "failed to decode balance")
 	}
-	return decimal.NewFromBigInt(i, req.TokenDecimals), nil
+	return decimal.NewFromBigInt(i, -req.TokenDecimals), nil
 }
 
 func decodeBigint(hex string) (*big.Int, error) {

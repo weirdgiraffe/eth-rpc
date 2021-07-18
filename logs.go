@@ -21,22 +21,22 @@ func NewLogsClient(impl MethodCaller) *LogsClient {
 }
 
 type LogEntry struct {
-	Address          Address    `json:"address"`
-	BlockHash        Hash       `json:"blockHash"`
-	BlockNumber      Number     `json:"blockNumber"`
-	Data             Data       `json:"data"`
-	LogIndex         Number     `json:"logIndex"`
-	Removed          bool       `json:"removed"`
-	Topics           []LogTopic `json:"topics"`
-	TransactionHash  Hash       `json:"transactionHash"`
-	TransactionIndex Number     `json:"transactionIndex"`
+	Address          Address `json:"address"`
+	BlockHash        Hash    `json:"blockHash"`
+	BlockNumber      Number  `json:"blockNumber"`
+	Data             Data    `json:"data"`
+	LogIndex         Number  `json:"logIndex"`
+	Removed          bool    `json:"removed"`
+	Topics           []Hash  `json:"topics"`
+	TransactionHash  Hash    `json:"transactionHash"`
+	TransactionIndex Number  `json:"transactionIndex"`
 }
 
-func (c *LogsClient) GetLogsForBlockNumber(ctx context.Context, n BlockNumber, topic ...LogTopic) ([]LogEntry, error) {
+func (c *LogsClient) GetLogsForBlockNumber(ctx context.Context, n BlockNumber, topic ...Hash) ([]LogEntry, error) {
 	return c.GetLogsForBlockRange(ctx, n, n, topic...)
 }
 
-func (c *LogsClient) GetLogsForBlockRange(ctx context.Context, from, to BlockNumber, topic ...LogTopic) ([]LogEntry, error) {
+func (c *LogsClient) GetLogsForBlockRange(ctx context.Context, from, to BlockNumber, topic ...Hash) ([]LogEntry, error) {
 	l := make([]string, len(topic))
 	for i := range topic {
 		l[i] = topic[i].String()
