@@ -37,6 +37,7 @@ func (c *HTTP) ProxyCall(target string, w http.ResponseWriter, r *http.Request) 
 	for h := range r.Header {
 		nr.Header.Set(h, r.Header.Get(h))
 	}
+	nr.Body = io.NopCloser(r.Body)
 
 	res, err := c.http.Do(nr.WithContext(r.Context()))
 	if err != nil {
