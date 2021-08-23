@@ -39,6 +39,22 @@ type DetailedBlock struct {
 	Transactions []Transaction `json:"transactions"`
 }
 
+func (c *Client) BlockByNumber(ctx context.Context) (BlockNumber, error) {
+	res, err := c.impl.Call(ctx, "eth_blockNumber")
+	if err != nil {
+		return BlockNumber(-1), err
+	}
+	if res.Error != nil {
+		return BlockNumber(-1), res.Error
+	}
+	var out BlockNumber
+	err = json.Unmarshal(res.Result, &out)
+	if err != nil {
+		return BlockNumber(-1), errors.Wrap(err, "failed to decode rpc result")
+	}
+	return out, nil
+}
+
 func (c *Client) GetBlockByHash(ctx context.Context, h Hash) (*Block, error) {
 	res, err := c.impl.Call(ctx, "eth_getBlockByHash", h, false)
 	if err != nil {
