@@ -39,7 +39,7 @@ type DetailedBlock struct {
 	Transactions []Transaction `json:"transactions"`
 }
 
-func (c *Client) BlockByNumber(ctx context.Context) (BlockNumber, error) {
+func (c *Client) BlockNumber(ctx context.Context) (BlockNumber, error) {
 	res, err := c.impl.Call(ctx, "eth_blockNumber")
 	if err != nil {
 		return BlockNumber(-1), err
