@@ -314,12 +314,10 @@ github.com/tklauser/numcpus v0.2.2 h1:oyhllyrScuYI6g+h/zUvNXNp1wy7x8qQy3t/piefld
 github.com/tklauser/numcpus v0.2.2/go.mod h1:x3qojaO3uyYt0i56EW/VUYs7uBvdl2fkfZFu0T9wgjM=
 github.com/tyler-smith/go-bip39 v1.0.1-0.20181017060643-dbb3b84ba2ef/go.mod h1:sJ5fKU0s6JVwZjjcUEX2zFOnvq0ASQ2K9Zr6cf67kNs=
 github.com/urfave/cli/v2 v2.3.0/go.mod h1:LJmUH05zAU44vOAcrfzZQKsZbVcdbOG8rtL3/XcUArI=
-github.com/weirdgiraffe/jsonrpc v0.0.0-20210501225504-b3f48c6cb0ed h1:k8KPjWRXi++K2x+rpEWGGvq10AAfG1biM1M1M2vXop4=
-github.com/weirdgiraffe/jsonrpc v0.0.0-20210501225504-b3f48c6cb0ed/go.mod h1:AmKNO5rQZRLcYvKPhtlf0FSR9Pibyo47+VcmJ3V01HA=
-github.com/weirdgiraffe/jsonrpc v0.0.0-20210823074249-55415cc97d5f h1:kCsu0fCw0mdopUl5zN37NQjCR3tu4b6AuihmTmcxmso=
-github.com/weirdgiraffe/jsonrpc v0.0.0-20210823074249-55415cc97d5f/go.mod h1:AmKNO5rQZRLcYvKPhtlf0FSR9Pibyo47+VcmJ3V01HA=
 github.com/weirdgiraffe/jsonrpc v0.0.0-20210823092615-08d7fb47c01d h1:6Zkd8chmc8sWFeJwvPwPjZcoabzKuXn2St/FFrvI/rg=
 github.com/weirdgiraffe/jsonrpc v0.0.0-20210823092615-08d7fb47c01d/go.mod h1:AmKNO5rQZRLcYvKPhtlf0FSR9Pibyo47+VcmJ3V01HA=
+github.com/weirdgiraffe/jsonrpc v0.0.0-20210823114627-0f97c78573b5 h1:IHesDsGBM84R0TsUVrcrsq6yHvJYOActhd/qIBaXbXI=
+github.com/weirdgiraffe/jsonrpc v0.0.0-20210823114627-0f97c78573b5/go.mod h1:AmKNO5rQZRLcYvKPhtlf0FSR9Pibyo47+VcmJ3V01HA=
 github.com/willf/bitset v1.1.3/go.mod h1:RjeCKbqT1RxIR/KWY6phxZiaY1IyutSBfGjNPySAYV4=
 github.com/xlab/treeprint v0.0.0-20180616005107-d6fb6747feb6/go.mod h1:ce1O1j6UtZfjr22oyGxGLbauSBp2YVXpARAosm7dHBg=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

@@ -1,6 +1,7 @@
 package ethrpc
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"sync"
@@ -56,26 +57,30 @@ func NewDumper(opt ...DumpOption) *Dumper {
 	return d
 }
 
-func (d *Dumper) DumpRequest(req []byte) {
+func (d *Dumper) DumpRequest(v interface{}) {
 	if d.dumpRequests {
 		d.mx.Lock()
 		defer d.mx.Unlock()
-		fmt.Fprintln(d.output, string(req))
+		d.dump(v)
 	}
 }
-
-func (d *Dumper) DumpResponse(res []byte) {
+func (d *Dumper) DumpResponse(v interface{}) {
 	if d.dumpResponses {
 		d.mx.Lock()
 		defer d.mx.Unlock()
-		fmt.Fprintln(d.output, string(res))
+		d.dump(v)
 	}
 }
 
-func (d *Dumper) DumpNotification(notify []byte) {
+func (d *Dumper) DumpNotification(v interface{}) {
 	if d.dumpNotifications {
 		d.mx.Lock()
 		defer d.mx.Unlock()
-		fmt.Fprintln(d.output, string(notify))
+		d.dump(v)
 	}
+}
+
+func (d *Dumper) dump(v interface{}) {
+	b, _ := json.Marshal(v)
+	fmt.Fprintln(d.output, string(b))
 }
