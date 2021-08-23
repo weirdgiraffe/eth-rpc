@@ -12,7 +12,7 @@ func TestGetTransactionReceipt(t *testing.T) {
 	ctx := context.Background()
 
 	var exp TransactionReceipt
-	getGolden(t, "receipt.json", &exp)
+	getGoldenJSON(t, "receipt.json", &exp)
 
 	got, err := client.GetTransactionReceipt(ctx, exp.TransactionHash)
 	require.NoError(t, err)

@@ -1,8 +1,10 @@
 package ethrpc
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -25,10 +27,27 @@ func testClient(t *testing.T) *Client {
 	return NewClient(NewHTTP(TestHttpURL))
 }
 
-func getGolden(t *testing.T, relPath string, dst interface{}) {
+func getGolden(t *testing.T, relPath string) []byte {
 	t.Helper()
 
 	b, err := os.ReadFile("golden/" + relPath)
 	require.NoError(t, err)
+	return b
+}
+
+func getGoldenJSON(t *testing.T, relPath string, dst interface{}) {
+	t.Helper()
+
+	b := getGolden(t, relPath)
 	require.NoError(t, json.Unmarshal(b, dst))
+}
+
+func getGoldenHEX(t *testing.T, relPath string) []byte {
+	t.Helper()
+
+	b := getGolden(t, relPath)
+	s := strings.TrimSpace(strings.TrimPrefix(string(b), "0x"))
+	b, err := hex.DecodeString(s)
+	require.NoError(t, err)
+	return b
 }

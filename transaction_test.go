@@ -12,7 +12,7 @@ func TestGetTransactionByHash(t *testing.T) {
 	ctx := context.Background()
 
 	var exp Transaction
-	getGolden(t, "transaction.json", &exp)
+	getGoldenJSON(t, "transaction.json", &exp)
 
 	got, err := client.GetTransactionByHash(ctx, exp.Hash)
 	require.NoError(t, err)
