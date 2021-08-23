@@ -28,6 +28,36 @@ func NewHTTP(url string, opt ...DumpOption) *HTTP {
 	}
 }
 
+func (c *HTTP) ProxyCall(target string, w http.ResponseWriter, r *http.Request) {
+	nr, err := http.NewRequest(r.Method, target, r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadGateway)
+		return
+	}
+	for h := range r.Header {
+		nr.Header.Set(h, r.Header.Get(h))
+	}
+
+	res, err := c.http.Do(nr.WithContext(r.Context()))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadGateway)
+		return
+	}
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadGateway)
+		return
+	}
+
+	w.WriteHeader(res.StatusCode)
+	for h := range res.Header {
+		w.Header().Set(h, res.Header.Get(h))
+	}
+	w.Write(body)
+}
+
 func (c *HTTP) Call(ctx context.Context, method string, params ...interface{}) (*jsonrpc.Response, error) {
 	jreq, err := json.Marshal(jsonrpc.NewRequest(
 		atomic.AddUint64(&c.seq, 1),
