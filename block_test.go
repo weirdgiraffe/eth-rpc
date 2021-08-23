@@ -12,7 +12,7 @@ func TestGetBlockByHash(t *testing.T) {
 	ctx := context.Background()
 
 	var exp Block
-	getGolden(t, "block.json", &exp)
+	getGoldenJSON(t, "block.json", &exp)
 
 	got, err := client.GetBlockByHash(ctx, exp.Hash)
 	require.NoError(t, err)
@@ -24,7 +24,7 @@ func TestGetDetailedBlockByHash(t *testing.T) {
 	ctx := context.Background()
 
 	var exp DetailedBlock
-	getGolden(t, "detailed-block.json", &exp)
+	getGoldenJSON(t, "detailed-block.json", &exp)
 
 	got, err := client.GetDetailedBlockByHash(ctx, exp.Hash)
 	require.NoError(t, err)

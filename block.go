@@ -55,6 +55,22 @@ func (c *Client) GetBlockByHash(ctx context.Context, h Hash) (*Block, error) {
 	return &out, nil
 }
 
+func (c *Client) GetBlockByNumber(ctx context.Context, n BlockNumber) (*Block, error) {
+	res, err := c.impl.Call(ctx, "eth_getBlockByNumber", n, false)
+	if err != nil {
+		return nil, err
+	}
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	var out Block
+	err = json.Unmarshal(res.Result, &out)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to decode rpc result")
+	}
+	return &out, nil
+}
+
 func (c *Client) GetDetailedBlockByHash(ctx context.Context, h Hash) (*DetailedBlock, error) {
 	res, err := c.impl.Call(ctx, "eth_getBlockByHash", h, true)
 	if err != nil {
