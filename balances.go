@@ -29,6 +29,27 @@ type GetBalanceRequest struct {
 	TokenDecimals int32
 }
 
+func (c *Client) GetBalanceETH(ctx context.Context, addr Address, block BlockNumber) (out decimal.Decimal, err error) {
+	res, err := c.impl.Call(ctx, "eth_getBalance", addr.String(), block.String())
+	if err != nil {
+		return out, err
+	}
+	if res.Error != nil {
+		return out, res.Error
+	}
+
+	var evmValue string
+	err = json.Unmarshal(res.Result, &evmValue)
+	if err != nil {
+		return out, errors.Wrap(err, "failed to decode rpc result")
+	}
+	i, err := decodeBigint(evmValue)
+	if err != nil {
+		return out, errors.Wrap(err, "failed to decode balance")
+	}
+	return decimal.NewFromBigInt(i, -18), nil
+}
+
 func (c *Client) GetBalanceERC20(ctx context.Context, req GetBalanceRequest) (decimal.Decimal, error) {
 	res, err := c.impl.Call(ctx, "eth_call",
 		map[string]interface{}{
