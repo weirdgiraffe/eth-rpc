@@ -20,9 +20,8 @@ type Transaction struct {
 	Value Data    `json:"value"`
 	Input Data    `json:"input"`
 
-	Gas          Number `json:"gas"`
-	GasPrice     Number `json:"gasPrice"`
-	BasFeePerGas Number `json:"baseFeePerGas"`
+	Gas      Number `json:"gas"`
+	GasPrice Number `json:"gasPrice"`
 
 	MaxPriorityFeePerGas Number `json:"maxPriorityFeePerGas"`
 	MaxFeePerGas         Number `json:"maxFeePerGas"`
