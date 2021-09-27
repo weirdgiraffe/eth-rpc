@@ -27,6 +27,7 @@ type BlockInfo struct {
 	TotalDifficulty  Data    `json:"totalDifficulty"`
 	TransactionsRoot Hash    `json:"transactionsRoot"`
 	Uncles           []Hash  `json:"uncles"`
+	BasFeePerGas     Number  `json:"baseFeePerGas"`
 }
 
 type Block struct {
