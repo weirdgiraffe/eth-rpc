@@ -30,16 +30,13 @@ type GetBalanceRequest struct {
 }
 
 func (c *Client) GetBalanceETH(ctx context.Context, addr Address, block BlockNumber) (out decimal.Decimal, err error) {
-	res, err := c.impl.Call(ctx, "eth_getBalance", addr.String(), block.String())
+	res, err := c.CallMethod(ctx, "eth_getBalance", []any{addr.String(), block.String()})
 	if err != nil {
 		return out, err
 	}
-	if res.Error != nil {
-		return out, res.Error
-	}
 
 	var evmValue string
-	err = json.Unmarshal(res.Result, &evmValue)
+	err = json.Unmarshal(res, &evmValue)
 	if err != nil {
 		return out, errors.Wrap(err, "failed to decode rpc result")
 	}
@@ -51,22 +48,19 @@ func (c *Client) GetBalanceETH(ctx context.Context, addr Address, block BlockNum
 }
 
 func (c *Client) GetBalanceERC20(ctx context.Context, req GetBalanceRequest) (decimal.Decimal, error) {
-	res, err := c.impl.Call(ctx, "eth_call",
-		map[string]interface{}{
+	res, err := c.CallMethod(ctx, "eth_call", []any{
+		map[string]any{
 			"to":   req.Token.String(),
 			"data": "0x70a08231" + padTo32(req.Addr.String()),
 		},
 		req.Block.String(),
-	)
+	})
 	if err != nil {
 		return decimal.Zero, err
 	}
-	if res.Error != nil {
-		return decimal.Zero, res.Error
-	}
 
 	var evmValue string
-	err = json.Unmarshal(res.Result, &evmValue)
+	err = json.Unmarshal(res, &evmValue)
 	if err != nil {
 		return decimal.Zero, errors.Wrap(err, "failed to decode rpc result")
 	}

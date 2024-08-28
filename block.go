@@ -2,120 +2,77 @@ package ethrpc
 
 import (
 	"context"
-	"encoding/json"
-
-	"github.com/pkg/errors"
 )
 
-type BlockInfo struct {
-	Difficulty       Number  `json:"difficulty"`
-	ExtraData        Data    `json:"extraData"`
-	GasLimit         Number  `json:"gasLimit"`
-	GasUsed          Number  `json:"gasUsed"`
-	Hash             Hash    `json:"hash"`
-	LogsBloom        Data    `json:"logsBloom"`
-	Miner            Address `json:"miner"`
-	MixHash          Hash    `json:"mixHash"`
-	Nonce            Number  `json:"nonce"`
-	Number           Number  `json:"number"`
-	ParentHash       Hash    `json:"parentHash"`
-	ReceiptsRoot     Hash    `json:"receiptsRoot"`
-	Sha3Uncles       Hash    `json:"sha3Uncles"`
-	Size             Number  `json:"size"`
-	StateRoot        Hash    `json:"stateRoot"`
-	Timestamp        Number  `json:"timestamp"`
-	TotalDifficulty  Data    `json:"totalDifficulty"`
-	TransactionsRoot Hash    `json:"transactionsRoot"`
-	Uncles           []Hash  `json:"uncles"`
-	BasFeePerGas     Number  `json:"baseFeePerGas"`
-}
-
 type Block struct {
-	BlockInfo
 	Transactions []Hash `json:"transactions"`
+	BlockInfo
 }
 
 type DetailedBlock struct {
-	BlockInfo
 	Transactions []Transaction `json:"transactions"`
+	BlockInfo
 }
 
-func (c *Client) BlockNumber(ctx context.Context) (BlockNumber, error) {
-	res, err := c.impl.Call(ctx, "eth_blockNumber")
+type BlockInfo struct {
+	ParentHash       Hash    `json:"parentHash"`
+	TransactionsRoot Hash    `json:"transactionsRoot"`
+	Uncles           []Hash  `json:"uncles"`
+	TotalDifficulty  Data    `json:"totalDifficulty"`
+	Hash             Hash    `json:"hash"`
+	LogsBloom        Data    `json:"logsBloom"`
+	Miner            Address `json:"miner"`
+	StateRoot        Hash    `json:"stateRoot"`
+	Sha3Uncles       Hash    `json:"sha3Uncles"`
+	ExtraData        Data    `json:"extraData"`
+	MixHash          Hash    `json:"mixHash"`
+	ReceiptsRoot     Hash    `json:"receiptsRoot"`
+	BasFeePerGas     Number  `json:"baseFeePerGas"`
+	Size             Number  `json:"size"`
+	Difficulty       Number  `json:"difficulty"`
+	Timestamp        Number  `json:"timestamp"`
+	GasUsed          Number  `json:"gasUsed"`
+	Number           Number  `json:"number"`
+	GasLimit         Number  `json:"gasLimit"`
+	Nonce            Number  `json:"nonce"`
+}
+
+func (c *Client) BlockNumber(ctx context.Context) (*BlockNumber, error) {
+	res, err := c.CallMethod(ctx, "eth_blockNumber", nil)
 	if err != nil {
-		return BlockNumber(-1), err
+		return nil, err
 	}
-	if res.Error != nil {
-		return BlockNumber(-1), res.Error
-	}
-	var out BlockNumber
-	err = json.Unmarshal(res.Result, &out)
-	if err != nil {
-		return BlockNumber(-1), errors.Wrap(err, "failed to decode rpc result")
-	}
-	return out, nil
+	return jsonUnmarshalStruct[BlockNumber](res)
 }
 
 func (c *Client) GetBlockByHash(ctx context.Context, h Hash) (*Block, error) {
-	res, err := c.impl.Call(ctx, "eth_getBlockByHash", h, false)
+	res, err := c.CallMethod(ctx, "eth_getBlockByHash", []any{h, false})
 	if err != nil {
 		return nil, err
 	}
-	if res.Error != nil {
-		return nil, res.Error
-	}
-	var out Block
-	err = json.Unmarshal(res.Result, &out)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to decode rpc result")
-	}
-	return &out, nil
+	return jsonUnmarshalStruct[Block](res)
 }
 
 func (c *Client) GetDetailedBlockByHash(ctx context.Context, h Hash) (*DetailedBlock, error) {
-	res, err := c.impl.Call(ctx, "eth_getBlockByHash", h, true)
+	res, err := c.CallMethod(ctx, "eth_getBlockByHash", []any{h, true})
 	if err != nil {
 		return nil, err
 	}
-	if res.Error != nil {
-		return nil, res.Error
-	}
-	var out DetailedBlock
-	err = json.Unmarshal(res.Result, &out)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to decode rpc result")
-	}
-	return &out, nil
+	return jsonUnmarshalStruct[DetailedBlock](res)
 }
 
 func (c *Client) GetBlockByNumber(ctx context.Context, n BlockNumber) (*Block, error) {
-	res, err := c.impl.Call(ctx, "eth_getBlockByNumber", n, false)
+	res, err := c.CallMethod(ctx, "eth_getBlockByNumber", []any{n, false})
 	if err != nil {
 		return nil, err
 	}
-	if res.Error != nil {
-		return nil, res.Error
-	}
-	var out Block
-	err = json.Unmarshal(res.Result, &out)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to decode rpc result")
-	}
-	return &out, nil
+	return jsonUnmarshalStruct[Block](res)
 }
 
 func (c *Client) GetDetailedBlockByNumber(ctx context.Context, n BlockNumber) (*DetailedBlock, error) {
-	res, err := c.impl.Call(ctx, "eth_getBlockByNumber", n, true)
+	res, err := c.CallMethod(ctx, "eth_getBlockByNumber", []any{n, true})
 	if err != nil {
 		return nil, err
 	}
-	if res.Error != nil {
-		return nil, res.Error
-	}
-	var out DetailedBlock
-	err = json.Unmarshal(res.Result, &out)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to decode rpc result")
-	}
-	return &out, nil
+	return jsonUnmarshalStruct[DetailedBlock](res)
 }

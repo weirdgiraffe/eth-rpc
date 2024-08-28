@@ -47,10 +47,25 @@ func MustNumberFromString(s string) Number {
 
 type BlockNumber int64
 
+// BlockNumberFromInt64 returns a BlockNumber from an int64. It panics if the
+// block number is negative.
+// Use [PendingBlock], [EarliestBlock] or [LatestBlock] for special block numbers.
+func BlockNumberFromInt64(i int64) BlockNumber {
+	if i < 0 {
+		panic("block number must be non-negative")
+	}
+	return BlockNumber(i)
+}
+
+func (n BlockNumber) Int64() int64 {
+	return int64(n)
+}
+
 const (
-	EarliestBlock BlockNumber = 0
-	PendingBlock              = -1
-	LatestBlock               = -2
+	BadBlock      BlockNumber = 0
+	EarliestBlock BlockNumber = -3
+	PendingBlock  BlockNumber = -2
+	LatestBlock   BlockNumber = -1
 )
 
 func (n BlockNumber) String() string {

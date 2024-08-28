@@ -2,9 +2,6 @@ package ethrpc
 
 import (
 	"context"
-	"encoding/json"
-
-	"github.com/pkg/errors"
 )
 
 type TraceAction struct {
@@ -34,18 +31,9 @@ type Trace struct {
 }
 
 func (c *Client) TraceBlock(ctx context.Context, b BlockNumber) ([]Trace, error) {
-	res, err := c.impl.Call(ctx, "trace_block", b)
+	res, err := c.CallMethod(ctx, "trace_block", []any{b})
 	if err != nil {
 		return nil, err
 	}
-	if res.Error != nil {
-		return nil, res.Error
-	}
-
-	var out []Trace
-	err = json.Unmarshal(res.Result, &out)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to decode rpc result")
-	}
-	return out, nil
+	return jsonUnmarshalSlice[Trace](res)
 }

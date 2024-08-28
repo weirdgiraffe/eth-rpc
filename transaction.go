@@ -2,9 +2,6 @@ package ethrpc
 
 import (
 	"context"
-	"encoding/json"
-
-	"github.com/pkg/errors"
 )
 
 type Transaction struct {
@@ -33,17 +30,9 @@ type Transaction struct {
 }
 
 func (c *Client) GetTransactionByHash(ctx context.Context, h Hash) (*Transaction, error) {
-	res, err := c.impl.Call(ctx, "eth_getTransactionByHash", h)
+	res, err := c.CallMethod(ctx, "eth_getTransactionByHash", []any{h})
 	if err != nil {
 		return nil, err
 	}
-	if res.Error != nil {
-		return nil, res.Error
-	}
-	var out Transaction
-	err = json.Unmarshal(res.Result, &out)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to decode rpc result")
-	}
-	return &out, nil
+	return jsonUnmarshalStruct[Transaction](res)
 }

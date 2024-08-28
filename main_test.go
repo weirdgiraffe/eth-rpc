@@ -3,28 +3,37 @@ package ethrpc
 import (
 	"encoding/hex"
 	"encoding/json"
+	"log/slog"
 	"os"
 	"strings"
 	"testing"
 
+	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/require"
+	"github.com/weirdgiraffe/jsonrpc"
 )
 
-var TestHttpURL string
+var rpcURL string
 
 func TestMain(m *testing.M) {
-	TestHttpURL = os.Getenv("TEST_RPCURL")
-	os.Exit(m.Run())
-
+	err := godotenv.Load(".env")
+	if err != nil {
+		slog.Warn("failed to load .env file")
+	}
+	rpcURL = os.Getenv("TEST_RPCURL")
+	exitCode := m.Run()
+	os.Exit(exitCode)
 }
 
 func testClient(t *testing.T) *Client {
 	t.Helper()
 
-	if TestHttpURL == "" {
+	if rpcURL == "" {
 		t.Skip("TEST_RPCURL env variable is not set")
 	}
-	return NewClient(NewHTTP(TestHttpURL))
+
+	impl := jsonrpc.NewHTTPClient(rpcURL)
+	return NewClient(impl)
 }
 
 func getGolden(t *testing.T, relPath string) []byte {
